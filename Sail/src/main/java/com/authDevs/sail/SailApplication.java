@@ -54,7 +54,7 @@ public class SailApplication extends Application implements SharedPreferences.On
 	public boolean addMeasurement(String meas) {
 		try {
 			now.setToNow();
-			measurements.add(meas + " received on: " + now.monthDay + "/" + now.month + " " + now.hour + ":" + now
+			measurements.add(meas + " - Received on: " + now.monthDay + "/" + now.month + " " + now.hour + ":" + now
 					.minute + " " + now
 					.second);
 			return true;

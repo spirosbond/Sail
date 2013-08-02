@@ -46,9 +46,7 @@
             android:textAlignment="center"
             android:id="@+id/textView"
             android:gravity="center_horizontal"
-            android:layout_below="@id/Buttons"
-            android:overScrollMode="always"
-            android:scrollbarThumbVertical="@style/AppTheme">
+            android:layout_below="@id/Buttons">
 
 
     </TextView>

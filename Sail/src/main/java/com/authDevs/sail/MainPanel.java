@@ -108,7 +108,8 @@ public class MainPanel extends Activity implements View.OnClickListener {
 		protected String doInBackground(String... strings) {
 			previousMeasurement = strings[0];
 
-			measurement = sailApplication.getLastMeasurement();
+			while ((measurement == null) || (measurement.equals(previousMeasurement))) measurement = sailApplication
+					.getLastMeasurement();
 			//Log.d(TAG, "Measurement read: " + measurement);
 
 			return null;
@@ -118,9 +119,8 @@ public class MainPanel extends Activity implements View.OnClickListener {
 		protected void onPostExecute(String s) {
 			super.onPostExecute(s);
 
-			if ((measurement != null) && (!measurement.equals(previousMeasurement))) {
-				textView.append(measurement + "\n");
-			}
+
+			textView.append(measurement.replaceAll("%", ", ") + "\n");
 
 			if (sailApplication.isServiceRunning()) new ShowMeasurements().execute(measurement);
 		}
