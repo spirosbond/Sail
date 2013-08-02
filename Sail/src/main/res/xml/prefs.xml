@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="@string/settingsGeneralCategory"
+            android:key="generalCategory">
+
+        <!-- EditText - Piece of Editable Texts-->
+
+        <EditTextPreference
+                android:title="@string/MAC"
+                android:summary="@string/summaryUsername"
+                android:key="MAC"
+                android:defaultValue="78:c4:e:1:fd:38"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

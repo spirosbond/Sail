@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sail</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="start">Start Monitoring</string>
+    <string name="stop">Stop Monitoring</string>
+    <string name="hello">Hello</string>
+    <string name="hint">Enter MAC here...</string>
+    <string name="titlePrefs">Settings</string>
+    <string name="settingsGeneralCategory">General Settings</string>
+    <string name="MAC">MAC</string>
+    <string name="summaryUsername">Insert the MAC you want to monitor here...</string>
+
+</resources>
