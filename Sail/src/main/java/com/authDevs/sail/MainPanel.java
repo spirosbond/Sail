@@ -20,13 +20,12 @@ public class MainPanel extends Activity implements View.OnClickListener {
 	public static ProgressBar progressBar;
 	Button startButton, stopButton;
 	TextView textView;
-	private SailApplication sailApplication;
+	private SailApplication sailApplication = new SailApplication();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mail_panel);
-
 
 		textView = (TextView) findViewById(R.id.textView);
 		startButton = (Button) findViewById(R.id.startButton);

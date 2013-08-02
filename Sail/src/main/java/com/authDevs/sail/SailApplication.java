@@ -16,14 +16,15 @@ public class SailApplication extends Application implements SharedPreferences.On
 	private static final String TAG = SailApplication.class.getSimpleName();
 	private SharedPreferences prefs;
 	private boolean serviceRunning;
-	private String MAC = "78:c4:e:1:fd:38";
+	private String MAC;
 	private ArrayList<String> measurements = new ArrayList<String>();
 	private Time now = new Time();
 
 	public void onCreate() { //
 		super.onCreate();
-		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		this.prefs.registerOnSharedPreferenceChangeListener(this);
+		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.prefs, true);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
 		Log.i(TAG, "onCreated");
 	}
 
@@ -43,11 +44,11 @@ public class SailApplication extends Application implements SharedPreferences.On
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-		this.MAC = this.prefs.getString("MAC", "");
+		MAC = this.prefs.getString("MAC", "");
 	}
 
 	public String getMAC() {
-		this.MAC = this.prefs.getString("MAC", "");
+		MAC = this.prefs.getString("MAC", "");
 		return MAC;
 	}
 

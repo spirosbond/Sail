@@ -91,11 +91,12 @@ public class MonitorService extends Service {
 
 				try {
 					measurement = dis.readLine();
-					sailApplication.addMeasurement(measurement);
+
 					if (measurement.contains("Ending Connection")) {
 						monitorService.runFlag = false;
 						break;
 					}
+					sailApplication.addMeasurement(measurement);
 
 				} catch (IOException e) {
 					e.printStackTrace();
