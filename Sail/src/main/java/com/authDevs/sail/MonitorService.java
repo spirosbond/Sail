@@ -33,8 +33,7 @@ public class MonitorService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		this.sailApplication = (SailApplication) getApplication();
-		MAC = sailApplication.getMAC();
+
 		Log.d(TAG, "onCreated");
 		this.updater = new Updater();
 	}
@@ -43,32 +42,33 @@ public class MonitorService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		Log.d(TAG, "onStarted");
-		this.runFlag = true;
-		this.updater.start();
-		this.sailApplication.setServiceRunning(true);
+		sailApplication = (SailApplication) getApplication();
+		MAC = sailApplication.getMAC();
+		runFlag = true;
+		sailApplication.setServiceRunning(true);
+		updater.start();
 		return START_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		this.runFlag = false;
-		this.updater.interrupt();
-		this.updater = null;
-		this.sailApplication.setServiceRunning(false);
+		runFlag = false;
+		updater.interrupt();
+		updater = null;
+		sailApplication.setServiceRunning(false);
 		Log.d(TAG, "onDestroyed");
 	}
 
-	private class Updater extends Thread { //
-		//List<Twitter.Status> timeline = null;
+	private class Updater extends Thread {
 
 		public Updater() {
-			super("UpdaterService-Updater"); //
+			super("UpdaterService-Updater");
 		}
 
 		@Override
-		public void run() { //
-			MonitorService monitorService = MonitorService.this; //
+		public void run() {
+			MonitorService monitorService = MonitorService.this;
 
 			Socket sk = null;
 			DataOutputStream dos = null;
@@ -81,28 +81,25 @@ public class MonitorService extends Service {
 				Log.d(TAG, "Socket opened");
 				dos = new DataOutputStream(sk.getOutputStream());
 				dis = new DataInputStream(sk.getInputStream());
-				dos.writeBytes(MAC+"\r\n");
+				dos.writeBytes(MAC + "\r\n");
 				Log.d(TAG, "MAC sent " + MAC);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			while (monitorService.runFlag) {
 				Log.d(TAG, "Updater running");
-				// Get the timeline from the cloud
+
 				try {
 					measurement = dis.readLine();
-					if(measurement.contains("Ending Connection")){
+					sailApplication.addMeasurement(measurement);
+					if (measurement.contains("Ending Connection")) {
 						monitorService.runFlag = false;
 						break;
 					}
-					//timeline = yamba.getTwitter().getFriendsTimeline(); //
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				// Loop over the timeline and print it out
-//					for (Twitter.Status status : timeline) { //
-//						Log.d(TAG, String.format("%s: %s", status.user.name, status.text)); //
-//					}
 				Log.d(TAG, measurement);
 				Log.d(TAG, "Updater ran");
 				try {
@@ -119,5 +116,5 @@ public class MonitorService extends Service {
 				e.printStackTrace();
 			}
 		}
-	} // Updater
+	}
 }

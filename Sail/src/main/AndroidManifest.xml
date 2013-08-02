@@ -21,8 +21,9 @@
             android:name=".SailApplication">
         <activity
                 android:name=".MainPanel"
-                android:label="@string/app_name">
-            <intent-filter>
+                android:label="@string/app_name"
+                android:screenOrientation="portrait">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -33,7 +34,10 @@
                 android:name=".PrefsActivity"
                 android:label="@string/titlePrefs"/>
 
-        <service android:name=".MonitorService"/>
+        <service
+                android:name=".MonitorService"
+                android:enabled="true"
+                android:permission="SAIL_SERVICE_PERMISSION"/>
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.authDevs.sail;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -52,15 +53,18 @@ public class MainPanel extends Activity implements View.OnClickListener {
 	public void onClick(View view) {
 		Log.d(TAG, "onClicked");
 		Button buttonPressed = (Button) view;
+
 		if (buttonPressed.getId() == R.id.startButton) {
+
 			textView.setText(null);
 			progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-			textView.setText("Receiving measurements...");
+			textView.setText("Receiving measurements...\n");
 
 			//Toast.makeText(getApplicationContext(), "Executing...", Toast.LENGTH_SHORT).show();
 
 			startService(new Intent(this, MonitorService.class));
+			new ShowMeasurements().execute(sailApplication.getLastMeasurement());
 			startButton.setEnabled(false);
 			stopButton.setEnabled(true);
 
@@ -70,7 +74,7 @@ public class MainPanel extends Activity implements View.OnClickListener {
 			stopService(new Intent(this, MonitorService.class));
 			startButton.setEnabled(true);
 			stopButton.setEnabled(false);
-			textView.setText("Stopped");
+			textView.setText("Stopped\n");
 		}
 	}
 
@@ -78,7 +82,7 @@ public class MainPanel extends Activity implements View.OnClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		//return super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();  // Menu inflater object
-		inflater.inflate(R.menu.main_panel, menu);
+		inflater.inflate(R.menu.main_panel_menu, menu);
 		return true;
 
 	}
@@ -94,5 +98,36 @@ public class MainPanel extends Activity implements View.OnClickListener {
 		}
 
 		return true;
+	}
+
+	public class ShowMeasurements extends AsyncTask<String, Integer, String> {
+
+		private String measurement, previousMeasurement = null;
+
+		@Override
+		protected String doInBackground(String... strings) {
+			previousMeasurement = strings[0];
+
+			measurement = sailApplication.getLastMeasurement();
+			//Log.d(TAG, "Measurement read: " + measurement);
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String s) {
+			super.onPostExecute(s);
+
+			if ((measurement != null) && (!measurement.equals(previousMeasurement))) {
+				textView.append(measurement + "\n");
+			}
+
+			if (sailApplication.isServiceRunning()) new ShowMeasurements().execute(measurement);
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			super.onProgressUpdate(values);
+		}
 	}
 }
