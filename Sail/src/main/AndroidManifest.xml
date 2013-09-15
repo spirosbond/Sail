@@ -38,6 +38,14 @@
                 android:name=".MonitorService"
                 android:enabled="true"
                 android:permission="SAIL_SERVICE_PERMISSION"/>
+
+        <!--<receiver android:name=".timeToUpdate">-->
+        <!--<intent-filter>-->
+        <!--<action android:name=""-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+
+
     </application>
 
 </manifest>

@@ -68,7 +68,6 @@ public class MonitorService extends Service {
 
 		@Override
 		public void run() {
-			MonitorService monitorService = MonitorService.this;
 
 			Socket sk = null;
 			DataOutputStream dos = null;
@@ -86,14 +85,14 @@ public class MonitorService extends Service {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			while (monitorService.runFlag) {
+			while (runFlag) {
 				Log.d(TAG, "Updater running");
 
 				try {
 					measurement = dis.readLine();
 
 					if (measurement.contains("Ending Connection")) {
-						monitorService.runFlag = false;
+						runFlag = false;
 						break;
 					}
 					sailApplication.addMeasurement(measurement);

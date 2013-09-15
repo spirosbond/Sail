@@ -51,9 +51,9 @@ public class MainPanel extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View view) {
 		Log.d(TAG, "onClicked");
-		Button buttonPressed = (Button) view;
 
-		if (buttonPressed.getId() == R.id.startButton) {
+
+		if (view.getId() == R.id.startButton) {
 
 			textView.setText(null);
 			progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -63,11 +63,12 @@ public class MainPanel extends Activity implements View.OnClickListener {
 			//Toast.makeText(getApplicationContext(), "Executing...", Toast.LENGTH_SHORT).show();
 
 			startService(new Intent(this, MonitorService.class));
+			sailApplication.setServiceRunning(true);
 			new ShowMeasurements().execute(sailApplication.getLastMeasurement());
 			startButton.setEnabled(false);
 			stopButton.setEnabled(true);
 
-		} else if (buttonPressed.getId() == R.id.stopButton) {
+		} else if (view.getId() == R.id.stopButton) {
 			//Toast.makeText(getApplicationContext(), "Cancelling", Toast.LENGTH_SHORT).show();
 			Log.d(TAG, "stopping service");
 			stopService(new Intent(this, MonitorService.class));
@@ -107,9 +108,22 @@ public class MainPanel extends Activity implements View.OnClickListener {
 		protected String doInBackground(String... strings) {
 			previousMeasurement = strings[0];
 
-			while ((measurement == null) || (measurement.equals(previousMeasurement))) measurement = sailApplication
-					.getLastMeasurement();
-			//Log.d(TAG, "Measurement read: " + measurement);
+			while (sailApplication.isServiceRunning()) {
+				while ((measurement == null) || (measurement.equals(previousMeasurement))) measurement = sailApplication
+								.getLastMeasurement();
+				Log.d(TAG, "Measurement read: " + measurement);
+
+				runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						textView.append(measurement.replaceAll("%", ", ") + "\n");
+					}
+				});
+
+				previousMeasurement = measurement;
+
+			}
 
 			return null;
 		}
@@ -118,10 +132,10 @@ public class MainPanel extends Activity implements View.OnClickListener {
 		protected void onPostExecute(String s) {
 			super.onPostExecute(s);
 
-
-			textView.append(measurement.replaceAll("%", ", ") + "\n");
-
-			if (sailApplication.isServiceRunning()) new ShowMeasurements().execute(measurement);
+//
+//			textView.append(measurement.replaceAll("%", ", ") + "\n");
+//
+//			if (sailApplication.isServiceRunning()) new ShowMeasurements().execute(measurement);
 		}
 
 		@Override
